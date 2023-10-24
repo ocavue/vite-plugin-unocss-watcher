@@ -13,15 +13,18 @@
     "url": "https://github.com/ocavue/vite-plugin-unocss-watcher.git"
   },
   "bugs": "https://github.com/ocavue/vite-plugin-unocss-watcher/issues",
-  "keywords": [],
+  "keywords": [
+    "unocss",
+    "vite",
+    "vite-plugin"
+  ],
   "sideEffects": false,
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
       "import": "./dist/index.js"
     }
   },
