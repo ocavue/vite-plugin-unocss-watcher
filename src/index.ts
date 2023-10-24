@@ -5,10 +5,7 @@ import type { Plugin } from 'vite'
 
 type GetContext = () => UnocssPluginContext | undefined
 
-export function unocssWatcher(
-  files: string[],
-  options?: { debug?: boolean },
-): Plugin {
+function unocssWatcher(files: string[], options?: { debug?: boolean }): Plugin {
   if (!Array.isArray(files)) {
     throw new TypeError(
       `[vite-plugin-unocss-watcher] 'files' must be an array of strings. Got: ${typeof files}`,
@@ -79,3 +76,6 @@ export function unocssWatcher(
     },
   }
 }
+
+export { unocssWatcher }
+export default unocssWatcher
