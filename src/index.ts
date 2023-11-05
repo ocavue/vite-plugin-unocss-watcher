@@ -1,7 +1,7 @@
 import path from 'node:path'
 
 import type { UnocssPluginContext } from '@unocss/core'
-import type { Plugin } from 'vite'
+import type { Plugin, ViteDevServer } from 'vite'
 
 type GetContext = () => UnocssPluginContext | undefined
 
@@ -17,6 +17,40 @@ function unocssWatcher(files: string[], options?: { debug?: boolean }): Plugin {
   const debug = options?.debug ?? false
 
   let getContext: GetContext | null = null
+
+  async function handleFileChange(server: ViteDevServer, p: string) {
+    if (!files.includes(p)) {
+      return
+    }
+
+    if (debug) {
+      console.debug(
+        `[vite-plugin-unocss-watcher] ${p} changed. Reloading UnoCSS config`,
+      )
+    }
+
+    const ctx = getContext?.()
+    if (!ctx) {
+      console.warn('[vite-plugin-unocss-watcher] Unable to find UnoCSS context')
+      return
+    }
+
+    await ctx.reloadConfig()
+    server.ws.send({
+      type: 'custom',
+      event: 'unocss:config-changed',
+    })
+  }
+
+  async function safeHandleFileChange(server: ViteDevServer, p: string) {
+    try {
+      await handleFileChange(server, p)
+    } catch (e) {
+      console.warn(
+        `[vite-plugin-unocss-watcher] Error handling file change: ${e}`,
+      )
+    }
+  }
 
   return {
     name: 'vite-plugin-unocss-watcher',
@@ -47,31 +81,8 @@ function unocssWatcher(files: string[], options?: { debug?: boolean }): Plugin {
 
       server.watcher.add(files)
 
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      server.watcher.on('change', async (p) => {
-        if (!files.includes(p)) {
-          return
-        }
-
-        if (debug) {
-          console.debug(
-            `[vite-plugin-unocss-watcher] ${p} changed. Reloading UnoCSS config`,
-          )
-        }
-
-        const ctx = getContext?.()
-        if (!ctx) {
-          console.warn(
-            '[vite-plugin-unocss-watcher] Unable to find UnoCSS context',
-          )
-          return
-        }
-
-        await ctx.reloadConfig()
-        server.ws.send({
-          type: 'custom',
-          event: 'unocss:config-changed',
-        })
+      server.watcher.on('change', (path) => {
+        void safeHandleFileChange(server, path)
       })
     },
   }
