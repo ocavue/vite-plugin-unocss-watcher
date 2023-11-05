@@ -1,11 +1,6 @@
 # Changelog
 
-## [0.1.1](https://github.com/ocavue/vite-plugin-unocss-watcher/compare/v1.0.0...v0.1.1) (2023-11-05)
-
-
-### Features
-
-* add first implementation ([369aa8a](https://github.com/ocavue/vite-plugin-unocss-watcher/commit/369aa8ae70bdde6369599248fd17859ffe2463b0))
+## [0.1.1](https://github.com/ocavue/vite-plugin-unocss-watcher/compare/v0.1.0...v0.1.1) (2023-11-05)
 
 
 ### Bug Fixes
