@@ -70,8 +70,6 @@ function unocssWatcher(files: string[], options?: { debug?: boolean }): Plugin {
         const api = unocssApiPlugin.api as { getContext?: GetContext }
         return api?.getContext?.()
       }
-
-      console.log('configResolved unocssApiPlugin', unocssApiPlugin)
     },
 
     configureServer(server) {
