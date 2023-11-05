@@ -47,6 +47,12 @@ npm install vite-plugin-unocss-watcher
   })
 ```
 
+You can pass `{ debug: true }` to `unocssWatcher` to see more logs.
+
+```ts
+unocssWatcher(['./my-shortcuts.js'], { debug: true })
+```
+
 ## License
 
 MIT
